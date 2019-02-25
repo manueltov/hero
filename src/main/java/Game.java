@@ -31,24 +31,36 @@ public class Game {
     }
 
     public void run(){
-        try{
-            draw();
-            processKey(screen.readInput());
-        } catch (IOException e) {
-            e.printStackTrace();
+        while(true) {
+            try{
+                draw();
+                if (KeyType.EOF == screen.readInput().getKeyType())
+                    break;
+                processKey(screen.readInput());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    private void processKey(KeyStroke key) {
-        switch (key.getKeyType()){
-            case (KeyType.ArrowUp): moveIt(0,1);
-                break;
-            case (KeyType.ArrowDown): moveIt(0, -1);
-                break;
-            case (KeyType.ArrowLeft): moveIt(1, 0);
-                break;
-            case (KeyType.ArrowRight): moveIt(-1, 0);
-                break;
+    private void processKey(KeyStroke key) throws IOException {
+        if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q')
+            screen.close();
+        else {
+            switch (key.getKeyType()) {
+                case ArrowUp:
+                    moveIt(0, 1);
+                    break;
+                case ArrowDown:
+                    moveIt(0, -1);
+                    break;
+                case ArrowLeft:
+                    moveIt(-1, 0);
+                    break;
+                case ArrowRight:
+                    moveIt(1, 0);
+                    break;
+            }
         }
     }
 
@@ -57,9 +69,3 @@ public class Game {
         this.y = this.y + y;
     }
 }
-
-
-/*
-if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q')
-  // ...
- */
